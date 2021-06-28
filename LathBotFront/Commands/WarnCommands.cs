@@ -19,6 +19,7 @@ using LathBotBack.Services;
 using DSharpPlus;
 using DSharpPlus.Net.Models;
 using System.Threading;
+using DSharpPlus.Interactivity.Enums;
 
 namespace LathBotFront.Commands
 {
@@ -337,7 +338,7 @@ namespace LathBotFront.Commands
 			{
 				Content = "How long should the user be put in timeout?"
 			};
-			messageBuilder.WithComponents(new DiscordComponent[]
+			messageBuilder.AddComponents(new DiscordComponent[]
 			{
 				new DiscordButtonComponent(ButtonStyle.Success, "15", "15 min", emoji:new DiscordComponentEmoji("🕒")),
 				new DiscordButtonComponent(ButtonStyle.Primary, "30", "30 min", emoji:new DiscordComponentEmoji("🕧")),
@@ -372,7 +373,7 @@ namespace LathBotFront.Commands
 			}
 			UserRepository urepo = new UserRepository(ReadConfig.configJson.ConnectionString);
 			AuditRepository repo = new AuditRepository(ReadConfig.configJson.ConnectionString);
-			bool userResult = urepo.GetIdByDcId(member.Id, out int id);
+			bool userResult = urepo.GetIdByDcId(member.Id, out _);
 			DiscordRole verificationRole = ctx.Guild.GetRole(767050052257447936);
 			DiscordRole mutedRole = ctx.Guild.GetRole(701446136208293969);
 			if (!userResult)
@@ -1109,7 +1110,7 @@ namespace LathBotFront.Commands
 				new DiscordButtonComponent(ButtonStyle.Danger, "sure", "Yes I fucking am!"),
 				new DiscordButtonComponent(ButtonStyle.Secondary, "abort", "NO ABORT, ABORT!")
 			};
-			builder.WithComponents(components);
+			builder.AddComponents(components);
 			DiscordMessage message = await builder.SendAsync(ctx.Channel);
 			InteractivityExtension interactivity = ctx.Client.GetInteractivity();
 			var interactivityResult = await interactivity.WaitForButtonAsync(message, ctx.User);
@@ -1182,7 +1183,7 @@ namespace LathBotFront.Commands
 							$"Rule {RuleService.rules[index].RuleNum}: {RuleService.rules[index].ShortDesc}"
 						));
 					}
-					messageBuilder.WithComponents(row);
+					messageBuilder.AddComponents(row);
 				}
 				DiscordMessage message = await ctx.Channel.SendMessageAsync(messageBuilder);
 
@@ -1209,7 +1210,7 @@ namespace LathBotFront.Commands
 							(index + 1) < rule.MinPoints || (index + 1) > rule.MaxPoints)
 						);
 					}
-					discordMessage.WithComponents(buttons);
+					discordMessage.AddComponents(buttons);
 				}
 				DiscordMessage pointsMessage = await ctx.Channel.SendMessageAsync(discordMessage);
 				var interactpointsMessage = await interactivity.WaitForButtonAsync(pointsMessage, ctx.User);

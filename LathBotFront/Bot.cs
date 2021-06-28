@@ -97,6 +97,7 @@ namespace LathBotFront
 			Commands.RegisterCommands<RuleCommands>();
 			Commands.RegisterCommands<TechnicalCommands>();
 			Commands.RegisterCommands<WarnCommands>();
+			Commands.RegisterCommands<MeetingCommands>();
 
 			//Register command events
 			Commands.CommandErrored += Events.CommandErrored;
